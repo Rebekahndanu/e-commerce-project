@@ -1,2 +1,2 @@
 # rebekah
-Phase4 Project
+Phase4 beauty app
