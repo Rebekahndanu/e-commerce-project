@@ -1,5 +1,5 @@
 from app import app
-from models import db, User, Order, OrderItem, Product
+from models import db, User, Order, Product, Cart
 from faker import Faker
 
 
@@ -10,27 +10,10 @@ with app.app_context():
     print("Deleting data...")
     User.query.delete()
     Order.query.delete()
-    OrderItem.query.delete()
+    Cart.query.delete()
     Product.query.delete()
     db.session.commit()
 
-    # Creating users
-    print("Creating users...")
-    users = []
-    usernames = []
-    for i in range(25):
-
-        username = fake.first_name()
-        while username in usernames:
-            username = fake.first_name()
-        
-        usernames.append(username)
-
-        user = User(username=username)
-        users.append(user)
-
-    db.session.add_all(users)
-    db.session.commit()
 
     products_data = [
         {"name": "Cleanser", "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM2YZLfUVwcWLmdReHb4spC_QmXhbKoSYQJJFYUIiRcw&s", "price": 10},
