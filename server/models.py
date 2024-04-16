@@ -36,10 +36,12 @@ class Order(db.Model, SerializerMixin):
     __tablename__ = "orders"
 
     id = db.Column(db.Integer, primary_key=True)
-    order_number = db.Column(db.Integer)
+    Address = db.Column(db.Integer)
     order_date = db.Column(db.DateTime)
-    total_price = db.Column(db.Float)
-    status = db.Column(db.String)
+    quantity = db.Column(db.Integer)
+    name= db.Column(db.String)
+    price = db.Column(db.Integer)
+    
 
     # Define the many-to-one relationship with User
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
