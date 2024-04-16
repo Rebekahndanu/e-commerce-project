@@ -7,10 +7,13 @@ class User(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, nullable=False, unique=True)
-    _password_hash=db.Column(db.String)
+    email = db.Column(db.String)
+    phone_number = db.Column(db.String)
+    password=db.Column(db.String)
 
     # One-to-many relationship with Order
     orders = db.relationship("Order", back_populates="user")
+
 
     def __repr__(self):
         return f"<User(id={self.id}, username='{self.username}')>"
@@ -21,10 +24,10 @@ class Product(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     image_url=db.Column(db.String)
     name = db.Column(db.String, nullable=False)
-    price = db.Column(db.Integer, nullable=False)
+    price = db.Column(db.Float, nullable=False)
 
-    # One-to-many relationship with OrderItem
-    order_items = db.relationship("OrderItem", back_populates="product", cascade="all, delete-orphan")
+    # Define the one-to-many relationship with Order
+    orders = db.relationship("Order", back_populates="product")
 
     def __repr__(self):
         return f"<Product(id={self.id}, name='{self.name}', price={self.price})>"
@@ -35,34 +38,37 @@ class Order(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     order_number = db.Column(db.Integer)
     order_date = db.Column(db.DateTime)
-    total_price = db.Column(db.Integer)
+    total_price = db.Column(db.Float)
     status = db.Column(db.String)
 
-    # One-to-many relationship with User
+    # Define the many-to-one relationship with User
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = db.relationship("User", back_populates="orders")
 
-    # One-to-many relationship with OrderItem
-    order_items = db.relationship("OrderItem", back_populates="order")
+    # Define the many-to-one relationship with Product
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
+    product = db.relationship("Product", back_populates="orders")
+
+    # Define the one-to-one relationship with Cart
+    cart_id = db.Column(db.Integer, db.ForeignKey('carts.id'))
+    cart = db.relationship("Cart", back_populates="order")
 
     def __repr__(self):
         return f"<Order(id={self.id}, order_number={self.order_number}, total_price={self.total_price}, status='{self.status}')>"
-
-class OrderItem(db.Model, SerializerMixin):
-    __tablename__ = "order_items"
+    
+class Cart(db.Model, SerializerMixin):
+    __tablename__ = "carts"
 
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
     quantity = db.Column(db.Integer)
+    total_price = db.Column(db.Float)
 
-    # Many-to-one relationship with Order
-    order_id = db.Column(db.Integer, db.ForeignKey('orders.id'))
-    order = db.relationship("Order", back_populates="order_items")
-
-    # Many-to-one relationship with Product
-    product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
-    product = db.relationship("Product", back_populates="order_items")
+    # Define the one-to-one relationship with Order
+    order = db.relationship("Order", uselist=False, back_populates="cart")
 
     def __repr__(self):
-        return f"<OrderItem(id={self.id}, quantity={self.quantity})>"
-    
+        return f"<Cart(id={self.id}, name={self.name}, quantity={self.quantity}, total_price={self.total_price})"
+
+
 
