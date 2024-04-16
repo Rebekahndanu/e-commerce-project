@@ -27,3 +27,6 @@ api = Api(app)
 CORS(app)
 
 bcrypt = Bcrypt(app)
+
+app.secret_key = 'secret key'
+app.config['JWT_SECRET_KEY'] = 'this-is-secret-key'
