@@ -17,20 +17,29 @@ class User(db.Model, SerializerMixin):
 
     def __repr__(self):
         return f"<User(id={self.id}, username='{self.username}')>"
-
+    
 class Product(db.Model, SerializerMixin):
     __tablename__ = "products"
 
     id = db.Column(db.Integer, primary_key=True)
-    image_url=db.Column(db.String)
+    image_url = db.Column(db.String)
     name = db.Column(db.String, nullable=False)
     price = db.Column(db.Float, nullable=False)
 
-    # Define the one-to-many relationship with Order
+    #  one-to-many relationship with Order
     orders = db.relationship("Order", back_populates="product")
+
+    def serialize(self):
+        return {
+            'id': self.id,
+            'image_url': self.image_url,
+            'name': self.name,
+            'price': self.price
+        }
 
     def __repr__(self):
         return f"<Product(id={self.id}, name='{self.name}', price={self.price})>"
+
 
 class Order(db.Model, SerializerMixin):
     __tablename__ = "orders"
