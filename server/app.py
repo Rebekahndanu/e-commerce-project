@@ -83,7 +83,7 @@ def get_and_patch_using_id(id):
         
         try:
             db.session.commit()
-            return jsonify(item.to_dict()), 200
+            return jsonify(user.to_dict()), 200
         except Exception as e:
             db.session.rollback()
             return jsonify({'error': f'Failed to update item: {str(e)}'}), 500
