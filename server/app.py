@@ -2,9 +2,11 @@ from config import app, db, api
 from models import User, Product, Order
 from flask import Flask, jsonify, request
 from flask_restful import Api, Resource
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from flask_migrate import Migrate
 from datetime import datetime
+from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity, create_access_token
+from flask_bcrypt import Bcrypt
 
 
 app = Flask(__name__)
@@ -20,18 +22,99 @@ db.init_app(app)
 
 api = Api(app)
 
+bcrypt = Bcrypt(app)
+
+app.secret_key = 'secret key'
+app.config['JWT_SECRET_KEY'] = 'this-is-secret-key'
+
+jwt = JWTManager(app)
+
 @app.route('/')
 def index():
     return {"message": "success"}
+
+class UserRegister(Resource):
+    @cross_origin()
+    def post(self):
+        username = request.json['username']
+        email = request.json['email']
+        phone = request.json['phone']
+        password = str(request.json['password'])
+        confirm_password = str(request.json['confirmPassword'])
+
+        user_exists = User.query.filter_by(username=username).first()
+
+        if user_exists:
+            return jsonify({'error': 'User already exists'}), 409
+        
+        if password != confirm_password:
+            return jsonify({'Error': 'Passwords not matching'})
+
+        hashed_pw = bcrypt.generate_password_hash(password)
+        hashed_cpw = bcrypt.generate_password_hash(confirm_password)
+
+        access_token = create_access_token(identity=email)
+
+        new_user = User(
+            username=username,
+            email=email, 
+            phone_number=phone, 
+            password=hashed_pw,
+            confirm_password=hashed_cpw,
+        )
+        db.session.add(new_user)
+        db.session.commit()
+
+        return jsonify({
+            "id": new_user.id,
+            "username": new_user.username,
+            "email": new_user.email,
+            'phone': new_user.phone_number,
+            "access_token": access_token,
+        }),201
+
+api.add_resource(UserRegister, '/userRegister')
+
+class UserLogin(Resource):
+    @cross_origin()
+    def post(self):
+        username = request.json['username']
+        password = str(request.json['password'])
+
+        user = User.query.filter_by(username=username).first()
+
+        if user is None:
+            return jsonify({'error': 'Unauthorized'}), 401
+
+        if not bcrypt.check_password_hash(user.password, password):
+            return jsonify({'error': 'Unauthorized, incorrect password'}), 401
+        
+        access_token = create_access_token(identity=username)
+        user.access_token = access_token
+
+
+        return jsonify({
+            "id": user.id,
+            "username": user.username,
+            "access_token": access_token
+            
+        }), 201
+    
+api.add_resource(UserLogin, '/userLogin')
+
+class UserLogout(Resource):
+    def post(self):
+        pass
+
+api.add_resource(UserLogout, '/userLogout')
+
+
 # GET FOR ALL MODELS
 @app.route('/products', methods=[ 'GET'])
 def get_all_products():
     products = Product.query.all()
     product_list = [product.to_dict() for product in products]
     return jsonify(product_list)
-from flask import jsonify
-
-
 
 @app.route('/products/<int:id>', methods=['GET'])
 def get_product_by_id(id):

@@ -1,15 +1,16 @@
 from sqlalchemy_serializer import SerializerMixin
 
-from config import db, bcrypt
+from config import db
 
 class User(db.Model, SerializerMixin):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, nullable=False, unique=True)
-    email = db.Column(db.String)
-    phone_number = db.Column(db.String)
-    password=db.Column(db.String)
+    email = db.Column(db.String, nullable=False, unique=True)
+    phone_number = db.Column(db.Integer)
+    password=db.Column(db.String(80), nullable=False)
+    confirm_password = db.Column(db.String(80), nullable=False)
 
     # One-to-many relationship with Order
     orders = db.relationship("Order", back_populates="user")

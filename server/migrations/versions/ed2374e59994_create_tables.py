@@ -1,8 +1,8 @@
-"""Created tables
+"""Create tables
 
-Revision ID: 981805eac7c3
+Revision ID: ed2374e59994
 Revises: 
-Create Date: 2024-04-16 10:39:39.850889
+Create Date: 2024-04-17 03:32:38.279898
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '981805eac7c3'
+revision = 'ed2374e59994'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -35,18 +35,21 @@ def upgrade():
     op.create_table('users',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('username', sa.String(), nullable=False),
-    sa.Column('email', sa.String(), nullable=True),
-    sa.Column('phone_number', sa.String(), nullable=True),
-    sa.Column('password', sa.String(), nullable=True),
+    sa.Column('email', sa.String(), nullable=False),
+    sa.Column('phone_number', sa.Integer(), nullable=True),
+    sa.Column('password', sa.String(length=80), nullable=False),
+    sa.Column('confirm_password', sa.String(length=80), nullable=False),
     sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('email'),
     sa.UniqueConstraint('username')
     )
     op.create_table('orders',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('order_number', sa.Integer(), nullable=True),
+    sa.Column('Address', sa.Integer(), nullable=True),
     sa.Column('order_date', sa.DateTime(), nullable=True),
-    sa.Column('total_price', sa.Float(), nullable=True),
-    sa.Column('status', sa.String(), nullable=True),
+    sa.Column('quantity', sa.Integer(), nullable=True),
+    sa.Column('name', sa.String(), nullable=True),
+    sa.Column('price', sa.Integer(), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.Column('product_id', sa.Integer(), nullable=True),
     sa.Column('cart_id', sa.Integer(), nullable=True),
