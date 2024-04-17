@@ -1,0 +1,53 @@
+.nav {
+    position: sticky;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    background-color: rgb(14, 13, 13);
+    width: 100%;
+}
+  
+  .nav-logo {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 40px;
+    font-weight: 500;
+    margin-left: 15px;
+}
+  
+  .nav-menu {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    font-size: 18px;
+    gap: 90px;
+}
+
+.nav-menu a {
+    text-decoration: none;
+    color: #fff; 
+    font-weight: bold;
+    transition: color 0.3s ease-in-out;
+}
+  
+
+.nav-menu a:hover {
+    color: brown; 
+}
+  
+.home-button {
+    border-radius: 50px;
+    padding: 10px 38px;
+    background-color: brown;
+    margin-right: 15px;
+}
+
+.home-button:hover {
+    background-color: white;
+    color: brown;
+}
+
+span {
+    color: brown;
+}
+
