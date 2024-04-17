@@ -72,6 +72,50 @@ class UserRegister(Resource):
             return jsonify({'error': f'Failed to create item: {str(e)}'}), 500
         
 
+@app.route('/products', methods=['GET', 'POST'])
+def get_and_post_products():
+    if request.method == 'GET':
+        name = request.args.get('name')
+
+        if name:
+            products = Product.query.filter(Product.name.ilike(f'%{name}%')).all()
+
+        else:
+            products = Product.query.all()
+
+        return jsonify([product.to_dict() for product in products]), 200
+    
+    if request.method == "POST":
+        data = request.json
+
+        name = data.get('name')
+        image_url = data.get('image_url')
+        price = data.get('price')
+
+        new_product = Product(
+            image_url = image_url,
+            name = name,
+            price = price,
+        )
+
+        try:
+            db.session.add(new_product)
+            db.session.commit()
+            return jsonify(new_product.to_dict()), 200
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'error': f'Failed to create item: {str(e)}'}), 500
+
+
+@app.route('/products/<int:id>', methods=['GET'])
+def get_products_using_id(id):
+    session = db.session
+    product = session(Product, id)
+
+    if request.method == 'GET':
+        return jsonify(product.to_dict()), 200
+    
+
 @app.route('/users/<int:id>', methods=['GET','PATCH', 'DELETE'])
 def get_and_patch_using_id(id):
     user = User.query.get(id)
