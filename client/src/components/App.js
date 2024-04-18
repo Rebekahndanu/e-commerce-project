@@ -4,6 +4,7 @@ import Navbar from "./Navbar";
 import LoginForm from "./Login";
 import RegisterForm from "./Register";
 
+
 function App() {
     return (
         <>
@@ -11,6 +12,7 @@ function App() {
             <Routes>
                 <Route path="/products" element={<Home />} />
                 <Route path="/" element={<Home />} />
+
             </Routes>
         </>
     );

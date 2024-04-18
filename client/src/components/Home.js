@@ -59,10 +59,10 @@ function Home() {
                 </button>
             </form>
 
-            <ul>
+           <div className="goods">           <ul className="goods">
                 {suggestions.map((product) => (
                     <li key={product.id} onClick={() => handleSuggestionClick(product.name)}>
-                        <div>
+                        <div className="productcard">
                             <h3>{product.name}</h3>
                             <p>Price: ${product.price}</p>
                             <Link to={`/product/${product.id}`}>View Details</Link>
@@ -82,12 +82,15 @@ function Home() {
                         <div>
                             <h3>{product.name}</h3>
                             <p>Price: ${product.price}</p>
-                            <Link to={`/product/${product.id}`}>Add to Cart</Link>
+                            <div className="cart-card">
+                            <Link to={`/product/${product.id}`} className="cart">Add to Cart</Link>
+                            </div>
                         </div>
                     </li>
                 ))}
             </ul>
         </div>
+        </div> 
     );
 }
 

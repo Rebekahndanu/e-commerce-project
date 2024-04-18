@@ -1,5 +1,5 @@
 from config import app, db, api
-from models import User, Product, Order
+from models import User, Product, Order, Cart
 from flask import Flask, jsonify, request
 from flask_restful import Api, Resource
 from flask_cors import CORS, cross_origin
@@ -196,6 +196,21 @@ def get_and_post_orders():
         except Exception as e:
             db.session.rollback()
             return jsonify({'error': f'Failed to create item: {str(e)}'}), 500
+        
+# add to cart functionality
+@app.route('/cart/add', methods=['POST'])
+def add_to_cart():
+    data = request.json
+    product_id = data.get('product_id')
+    product = Product.query.get(product_id)
+
+    if not product:
+        return jsonify({'error': 'Product not found'}), 404
+    cart_item = Cart(product_id=product_id)
+    db.session.add(cart_item)
+    db.session.commit()
+    return jsonify({'message': 'Product added to cart successfully'}), 201
+
         
         
 if __name__ == '__main__':
