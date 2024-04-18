@@ -1,5 +1,5 @@
 from config import app, db, api
-from models import User, Product, Order, Cart, CartItem
+from models import User, Product, Order, Cart
 from flask import Flask, jsonify, request
 from flask_restful import Api, Resource
 from flask_cors import CORS, cross_origin
