@@ -48,14 +48,20 @@ function NavBar () {
                     <NavLink exact='true' to="/">Home</NavLink>
                 </li>
                 <li>
-                    <NavLink exact='true' to="/Register">Register</NavLink>
+                    <NavLink exact='true' to="/Products">Products</NavLink>
+                </li>
+                <li>
+                    <NavLink exact='true' to="/Login">Login</NavLink>
                 </li>
                 <li className="nav-menu">
                     <NavLink exact='true' to="/Signup">Sign Up</NavLink>
                 </li>
-                <li className="home-button">
-                    <NavLink exact='true' to="/Signup">Sign Up</NavLink>
+                <li className="nav-menu">
+                    <NavLink exact='true' to="/Cart">Cart</NavLink>
                 </li>
+                {/* <li className="home-button">
+                    <NavLink exact='true' to="/Signup">Sign Up</NavLink>
+                </li> */}
             </ul>
         </div>
     )
