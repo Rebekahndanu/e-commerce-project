@@ -1,5 +1,5 @@
 from config import app, db, api
-from models import User, Product, Order
+from models import User, Product, Order, Cart, CartItem
 from flask import Flask, jsonify, request
 from flask_restful import Api, Resource
 from flask_cors import CORS, cross_origin
@@ -38,9 +38,9 @@ class UserRegister(Resource):
     def post(self):
         username = request.json['username']
         email = request.json['email']
-        phone = request.json['phone']
+        phone_number = request.json['phone_number']
         password = str(request.json['password'])
-        confirm_password = str(request.json['confirmPassword'])
+        confirm_password = str(request.json['confirm_password'])
 
         user_exists = User.query.filter_by(username=username).first()
 
@@ -58,54 +58,63 @@ class UserRegister(Resource):
         new_user = User(
             username=username,
             email=email, 
-            phone_number=phone, 
+            phone_number=phone_number, 
             password=hashed_pw,
             confirm_password=hashed_cpw,
         )
+        db.session.add(new_user)
+        db.session.commit()
 
-        try:
-            db.session.add(new_user)
-            db.session.commit()
-            return jsonify(new_user.to_dict()), 200
-        except Exception as e:
-            db.session.rollback()
-            return jsonify({'error': f'Failed to create item: {str(e)}'}), 500
+        return jsonify({
+            "id": new_user.id,
+            "username": new_user.username,
+            "email": new_user.email,
+            'phone_number': new_user.phone_number,
+            "access_token": access_token,
+        }),201
+
+api.add_resource(UserRegister, '/userRegister')
+
+class UserLogin(Resource):
+    @cross_origin()
+    def post(self):
+        username = request.json['username']
+        password = str(request.json['password'])
+
+        user = User.query.filter_by(username=username).first()
+
+        if user is None:
+            return jsonify({'error': 'Unauthorized'}), 401
+
+        if not bcrypt.check_password_hash(user.password, password):
+            return jsonify({'error': 'Unauthorized, incorrect password'}), 401
         
+        access_token = create_access_token(identity=username)
+        user.access_token = access_token
 
-@app.route('/products', methods=['GET', 'POST'])
-def get_and_post_products():
-    if request.method == 'GET':
-        name = request.args.get('name')
 
-        if name:
-            products = Product.query.filter(Product.name.ilike(f'%{name}%')).all()
-
-        else:
-            products = Product.query.all()
-
-        return jsonify([product.to_dict() for product in products]), 200
+        return jsonify({
+            "id": user.id,
+            "username": user.username,
+            "access_token": access_token
+            
+        }), 201
     
-    if request.method == "POST":
-        data = request.json
+api.add_resource(UserLogin, '/userLogin')
 
-        name = data.get('name')
-        image_url = data.get('image_url')
-        price = data.get('price')
+class UserLogout(Resource):
+    def post(self):
+        pass
 
-        new_product = Product(
-            image_url = image_url,
-            name = name,
-            price = price,
-        )
+api.add_resource(UserLogout, '/userLogout')
 
-        try:
-            db.session.add(new_product)
-            db.session.commit()
-            return jsonify(new_product.to_dict()), 200
-        except Exception as e:
-            db.session.rollback()
-            return jsonify({'error': f'Failed to create item: {str(e)}'}), 500
 
+# GET FOR ALL MODELS
+@app.route('/products', methods=[ 'GET'])
+def get_all_products():
+    products = Product.query.all()
+    product_list = [product.to_dict() for product in products]
+    return jsonify(product_list)
 
 @app.route('/products/<int:id>', methods=['GET'])
 def get_products_using_id(id):
@@ -123,80 +132,69 @@ def get_and_patch_using_id(id):
     if request.method == 'GET':
         return jsonify(user.to_dict()), 200
     
-    elif request.method == 'PATCH':
-        data = request.json
-
-        if not data:
-            return jsonify({'error': 'No data provided for update'}), 400
-        
-        if not user:
-            return jsonify({'error': 'User not found'}), 404
-        
-        allowed_attributes = ['email', 'phone_number']
-        for attr, value in data.items():
-            if attr in allowed_attributes:
-                setattr(user, attr, value)
-            else:
-                return jsonify({'error': 'Invalid attribute'}), 400
-        
-        try:
-            db.session.commit()
-            return jsonify(user.to_dict()), 200
-        except Exception as e:
-            db.session.rollback()
-            return jsonify({'error': f'Failed to update item: {str(e)}'}), 500
-        
-    elif request.method == 'DELETE':
-        if not user:
-            return jsonify({'error': 'User not found'}), 404
-        
-        try:
-            db.session.delete(user)
-            db.session.commit()
-            return {}, 204
-        except Exception as e:
-            db.session.rollback()
-            return jsonify({'error': f'Failed to delete item: {str(e)}'}), 500
-
-
-
-@app.route('/orders', methods=['GET', 'POST'])
-def get_and_post_orders():
-    orders = Order.qery.all()
-    if request.method == 'GET':
-        return jsonify([order.to_dict() for order in orders])
+@app.route('/products/<int:id>', methods=['PATCH'])
+def update_product(id):
+    product = Product.query.get(id)
+    if not product:
+        return jsonify({"error": "Product not found"}), 404
     
-    elif request.method == 'POST':
-        data = request.json
+    data = request.json
+    if 'name' in data:
+        product.name = data['name']
+    if 'price' in data:
+        product.price = data['price']
+    if 'image_url' in data:
+        product.image_url = data['image_url']
+    
+    db.session.commit()
+    
+    return jsonify(product.serialize()), 200
 
-        if not data:
-            return jsonify({'error': 'No data provided for create'}), 400
-        
-        required_fields = ['address', 'name', 'quantity', 'price']
-        for field in required_fields:
-            if field not in data:
-                return ({'error': f'Missing required field: {field}'}), 400
-        
-        address = data.get('address')
-        name = data.get('name')
-        quantity = data.get('quantity')
-        price = data.get('price')
+@app.route('/products', methods=['POST'])
+def create_product():
+    data = request.json
+    image_url = data.get('image_url')
+    name = data.get('name')
+    price = data.get('price')
+    new_product = Product(image_url=image_url, name=name, price=price)
+    db.session.add(new_product)
+    db.session.commit()
+    return jsonify({'message': 'Product created successfully'}), 201
 
-        new_order = Order(
-            address = address,
-            name = name,
-            quantity = quantity,
-            price = price
-        )
+# # Add Product to Cart
+@app.route('/cart/add', methods=['POST'])
+@jwt_required()
+def add_to_cart():
+    current_user = get_jwt_identity()
+    user = User.query.filter_by(username=current_user).first()
 
-        try:
-            db.session.add(new_order)
-            db.session.commit()
-            return jsonify(new_order.to_dict())
-        except Exception as e:
-            db.session.rollback()
-            return jsonify({'error': f'Failed to create item: {str(e)}'}), 500
-        
-        
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+
+    data = request.json
+    product_id = data.get('product_id')
+    quantity = data.get('quantity', 1)  # Default quantity is 1 if not provided
+
+    product = Product.query.filter_by(id=product_id).first()
+
+    if not product:
+        return jsonify({'error': 'Product not found'}), 404
+
+    # Check if the product is already in the user's cart
+    cart_item = CartItem.query.filter_by(cart_id=user.id, product_id=product_id).first()
+
+    if cart_item:
+        # Update the quantity if the product is already in the cart
+        cart_item.quantity += quantity
+    else:
+        # Otherwise, create a new cart item
+        cart_item = CartItem(cart_id=user.id, product_id=product_id, quantity=quantity)
+        db.session.add(cart_item)
+
+    db.session.commit()
+
+    return jsonify({'message': 'Product added to cart successfully'}), 201
+
+           
 if __name__ == '__main__':
     app.run(port=5505, debug=True)
