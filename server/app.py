@@ -112,9 +112,16 @@ api.add_resource(UserLogout, '/userLogout')
 # GET FOR ALL MODELS
 @app.route('/products', methods=[ 'GET'])
 def get_all_products():
-    products = Product.query.all()
-    product_list = [product.to_dict() for product in products]
-    return jsonify(product_list)
+    if request.method == 'GET':  
+        name = request.args.get('name')
+
+        if name:
+            products = Product.query.filter(Product.name.ilike(f'%{name}%')).all()
+        
+        else:
+            products = Product.query.all()
+
+        return jsonify([product.to_dict() for product in products])
 
 @app.route('/products/<int:id>', methods=['GET'])
 def get_products_using_id(id):

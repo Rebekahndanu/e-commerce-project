@@ -22,6 +22,8 @@
 // export default Signup
 
 import React, { useState } from 'react';
+import './Signup.css'
+import NavBar from './Navbar';
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -56,8 +58,17 @@ const Signup = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <div className='signup-container'>
+            <div className="signup-navbar">
+                <NavBar/>
+                {/* Your NavBar content */}
+            </div>
+            <div className='signup-content'>
+              <h1>SIGN UP</h1>
+
+      <form onSubmit={handleSubmit} className='signup-form'>
       <input
+        className='signup-input'
         type="text"
         name="username"
         placeholder="Username"
@@ -66,6 +77,7 @@ const Signup = () => {
         required
       />
       <input
+        className='signup-input'
         type="email"
         name="email"
         placeholder="Email"
@@ -74,6 +86,7 @@ const Signup = () => {
         required
       />
       <input
+        className='signup-input'
         type="tel"
         name="phone_number"
         placeholder="Phone Number"
@@ -82,6 +95,7 @@ const Signup = () => {
         required
       />
       <input
+        className='signup-input'
         type="password"
         name="password"
         placeholder="Password"
@@ -90,6 +104,7 @@ const Signup = () => {
         required
       />
       <input
+      className='signup-input'
       type="confirm_password"
       name="confirm_password"
       placeholder="Password"
@@ -97,8 +112,13 @@ const Signup = () => {
       onChange={handleChange}
       required
       />
-      <button type="submit">Signup</button>
+      <button type="submit" className='signup-button'>Signup</button>
     </form>
+
+            </div>
+
+    </div>
+
   );
 };
 

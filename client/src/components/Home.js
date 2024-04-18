@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./Home.css";
+import NavBar from "./Navbar";
 
 function Home() {
     const [products, setProducts] = useState([]);
@@ -43,8 +44,14 @@ function Home() {
     }
     
     return (
-        <div>
-            <h1>Products</h1>
+        <div className="home-container">
+            <div className="home-navbar">
+                <NavBar/>
+                {/* Your NavBar content */}
+            </div>
+            <div className="home-content">
+
+            <h1 className="home-h1">Products</h1>
 
             <form className="search-form" onSubmit={handleSubmit}>
                 <input
@@ -71,22 +78,24 @@ function Home() {
                 ))}
             </ul>
 
-            <ul>
-                {products.map((product) => (
-                    <li key={product.id}>
+            <div className="home-inventory-container">
+                    {products.map((product, index) => (
+                        <div className="home-card" key={index}>
                         <img 
                             src={product.image_url} 
                             alt={product.name} 
                             className="product-image"
                         />
-                        <div>
                             <h3>{product.name}</h3>
-                            <p>Price: ${product.price}</p>
-                            <Link to={`/product/${product.id}`}>Add to Cart</Link>
+                            <p>Price: {product.price}</p>
+                            <Link to={`/product/${product.id}`} className="home-more-button">Add to Cart</Link>
+
                         </div>
-                    </li>
-                ))}
-            </ul>
+                    ))}
+                </div>
+
+            </div>
+
         </div>
     )
 }

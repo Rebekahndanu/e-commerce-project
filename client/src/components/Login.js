@@ -8,8 +8,9 @@
 //     )
 // }
 // export default Login
-
+import './Login.css'
 import React, { useState } from 'react';
+import NavBar from './Navbar';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -42,25 +43,41 @@ const Login = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        name="username"
-        placeholder="Username"
-        value={formData.username}
-        onChange={handleChange}
-        required
-      />
-      <input
-        type="password"
-        name="password"
-        placeholder="Password"
-        value={formData.password}
-        onChange={handleChange}
-        required
-      />
-      <button type="submit">Login</button>
-    </form>
+    <div className='login-container'>
+
+            <div className="login-navbar">
+                <NavBar/>
+                {/* Your NavBar content */}
+            </div>
+
+            <div className='login-content'>
+
+            <h1 className='login-h1'>LOGIN</h1>
+            <form onSubmit={handleSubmit} className='login-form'>
+                    <input
+                      className="login-input"
+                      type="text"
+                      name="username"
+                      placeholder="Username"
+                      value={formData.username}
+                      onChange={handleChange}
+                      required
+                    />
+                    <input
+                      className="login-input"
+                      type="password"
+                      name="password"
+                      placeholder="Password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      required
+                    />
+                    <button type="submit" className="login-button">Login</button>
+             </form>
+            </div>
+
+    </div>
+
   );
 };
 
