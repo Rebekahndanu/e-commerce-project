@@ -43,49 +43,6 @@ function Home() {
             <FontAwesomeIcon icon={faArrowLeft} className="arrow prev" onClick={prevSlide} />
             <FontAwesomeIcon icon={faArrowRight} className="arrow next" onClick={nextSlide} /> 
 
-<<<<<<< HEAD
-            <h1 className="home-h1">Products</h1>
-
-            <form className="search-form" onSubmit={handleSubmit}>
-                <input
-                    className="search-input"
-                    type="text"
-                    placeholder="Search by Name"
-                    value={name}
-                    onChange={handleName}
-                />
-                <button className="search-button" type="submit">
-                    Search
-                </button>
-            </form>
-
-           <div className="goods">           <ul className="goods">
-                {suggestions.map((product) => (
-                    <li key={product.id} onClick={() => handleSuggestionClick(product.name)}>
-                        <div className="productcard">
-                            <h3>{product.name}</h3>
-                            <p>Price: ${product.price}</p>
-                            <Link to={`/product/${product.id}`}>View Details</Link>
-                        </div>
-                    </li>
-                ))}
-            </ul>
-
-            <div className="home-inventory-container">
-                    {products.map((product, index) => (
-                        <div className="home-card" key={index}>
-                        <img 
-                            src={product.image_url} 
-                            alt={product.name} 
-                            className="product-image"
-                        />
-                            <h3>{product.name}</h3>
-                            <p>Price: {product.price}</p>
-                            <Link to={`/product/${product.id}`} className="home-more-button">Add to Cart</Link>
-
-                        </div>
-                    ))}
-=======
             {sliderData.map((slide, index) => (
                 <div className={index === currentIndex ? "current slide" : "slide"} key={index}>
                     {index === currentIndex && (
@@ -100,24 +57,18 @@ function Home() {
                             </div>
                         </>
                     )}
->>>>>>> 427e2d31ecad2b5cdd8aacec66959b73b529339f
                 </div>
             ))}
         </div>
         <div className="About">
 
         </div>
-<<<<<<< HEAD
-        </div>
-    )
-=======
         <div className="categoties">
 
         </div>
         </>
         
     );
->>>>>>> 427e2d31ecad2b5cdd8aacec66959b73b529339f
 }
 
 export default Home
