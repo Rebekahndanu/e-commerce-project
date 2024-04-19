@@ -1,13 +1,3 @@
-<<<<<<< HEAD
-import React from 'react'
-
-function Cart() {
-  return (
-    <div className='cart-container'>
-
-        
-      
-=======
 import React from "react";
 import { useContext } from "react";
 import { Cartcontext } from "../context/Context";
@@ -57,7 +47,6 @@ const Cart = () => {
           <h2>{total}</h2>
         </div>
       )}
->>>>>>> 427e2d31ecad2b5cdd8aacec66959b73b529339f
     </div>
   );
 };
