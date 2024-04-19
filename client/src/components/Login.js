@@ -8,11 +8,15 @@
 //     )
 // }
 // export default Login
+
 import './Login.css'
 import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import NavBar from './Navbar';
 
 const Login = () => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     username: '',
     password: ''
@@ -24,7 +28,6 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Call API to create new user using formData
     try {
       const response = await fetch('http://127.0.0.1:5505//userLogin', {
         method: 'POST',
@@ -36,8 +39,8 @@ const Login = () => {
       const data = await response.json();
       // Handle success response
       console.log('User logged in:', data);
+      navigate('/products'); 
     } catch (error) {
-      // Handle error
       console.error('Login failed:', error);
     }
   };
@@ -74,6 +77,9 @@ const Login = () => {
                     />
                     <button type="submit" className="login-button">Login</button>
              </form>
+             <div className="signup-link">
+                Don't have an account? <Link to="/Signup">Sign up</Link>
+            </div>
             </div>
 
     </div>

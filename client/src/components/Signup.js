@@ -1,31 +1,11 @@
-// import React from "react";
-
-// const Signup = () => {
-//     return(
-//         <div className="container mt-5">
-//             <div className="row">
-//                 <div className="col-12 col-md-5 col-sm-6">
-//                 <h1>Signup</h1>
-//                 </div>
-//                 <div className="col-12 col-md-5 col-sm-6">
-//                     <form method='POST'>
-//                         <div>
-
-//                         </div>
-//                     </form>
-//                 </div>
-//             </div>
-            
-//         </div>
-//     )
-// }
-// export default Signup
-
 import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import './Signup.css'
 import NavBar from './Navbar';
 
 const Signup = () => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     phone_number: '',
     username: '',
@@ -51,7 +31,7 @@ const Signup = () => {
       });
       const data = await response.json();
       console.log('User signed up:', data);
-      // Redirect or perform any other actions after successful signup
+      navigate('/products'); 
     } catch (error) {
       console.error('Signup failed:', error);
     }
@@ -105,17 +85,19 @@ const Signup = () => {
       />
       <input
       className='signup-input'
-      type="confirm_password"
+      type="password"
       name="confirm_password"
-      placeholder="Password"
+      placeholder="Confirm Password"
       value={formData.confirm_password}
       onChange={handleChange}
       required
       />
       <button type="submit" className='signup-button'>Signup</button>
     </form>
-
-            </div>
+    <div className="signup-link">
+        Already have an account? <Link to="/Login">Login</Link>
+    </div>
+    </div>
 
     </div>
 
