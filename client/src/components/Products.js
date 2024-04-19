@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import "./Product.css";
+import { Cartcontext } from "../context/Context";
 
 function Products() {
     const [products, setProducts] = useState([]);
@@ -11,12 +12,17 @@ function Products() {
             .catch((error) => console.error("Error fetching products:", error));
     }, []);
 
+    const Globalstate=useContext(Cartcontext);
+    const dispatch= Globalstate.dispatch;
+    console.log(Globalstate);
     return (
         <div>
             <h1>Products</h1>
             <ul>
-                {products.map((product) => (
-                    <li className="cont" key={product.id}>
+                {products.map((product, index) => {
+                    product.quantity = 1;
+                    return (
+                        <li className="cont" key={index}>
                         <img 
                             src={product.image_url} 
                             alt={product.name}
@@ -25,10 +31,12 @@ function Products() {
                         <div>
                             <h3>{product.name}</h3>
                             <p>Price: ${product.price}</p>
-                            <button>Add to Cart</button>
+                            <button onClick={()=>dispatch({type:'ADD', payload: product})}>Add to Cart</button>
                         </div>
                     </li>
-                ))}
+                    )
+                }
+                )}
             </ul>
         </div>
     );
