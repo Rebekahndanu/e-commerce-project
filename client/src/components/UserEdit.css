@@ -1,0 +1,17 @@
+.user-container {
+    display: flex;
+  }
+  
+  .user-navbar {
+    flex: 0 0 auto;
+    width: 200px;
+    background-color: #333;
+    height: 100vh;
+    padding-top: 20px;
+  }
+  
+  .user-content {
+    flex: 1;
+    padding: 20px;
+    margin-top: 20px;
+  }
