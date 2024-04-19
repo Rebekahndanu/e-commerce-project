@@ -60,6 +60,11 @@ function NavBar () {
                 <li className="nav-menu">
                     <NavLink exact='true' to="/Cart" className="navlink" activeclassname="active">Cart</NavLink>
                 </li>
+
+                <li className="nav-menu">
+                    <NavLink exact='true' to="/User" className="navlink" activeclassname="active">User</NavLink>
+                </li>
+                
                 {/* <li className="home-button">
                     <NavLink exact='true' to="/Signup">Sign Up</NavLink>
                 </li> */}

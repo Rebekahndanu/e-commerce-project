@@ -108,8 +108,41 @@ class UserLogout(Resource):
 
 api.add_resource(UserLogout, '/userLogout')
 
+@app.route('/users/<int:id>', methods=['PATCH'])
+def update_user(id):
+    user = User.query.get(id)
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+    
+    data = request.json
+    if 'name' in data:
+        user.name = data['name']
+    if 'email' in data:
+        user.email = data['email']
+    if 'phone_number' in data:
+        user.phone_number = data['phone_number']
+    
+    db.session.commit()
+    
+    return jsonify({
+        "id": user.id,
+        "name": user.name,
+        "email": user.email,
+        "phone_number": user.phone_number
+    }), 200
+
+
+
 
 # GET FOR ALL MODELS
+
+@app.route('/users', methods=['GET'])
+def get_all_users():
+    if request.method == 'GET':
+        users = User.query.all()
+        return jsonify([user.to_dict() for user in users])
+
+    
 @app.route('/products', methods=[ 'GET'])
 def get_all_products():
     if request.method == 'GET':  
@@ -133,7 +166,7 @@ def get_products_using_id(id):
     
 
 @app.route('/users/<int:id>', methods=['GET','PATCH', 'DELETE'])
-def get_and_patch_using_id(id):
+def get_and_patch_users_using_id(id):
     user = User.query.get(id)
 
     if request.method == 'GET':
