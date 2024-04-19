@@ -59,12 +59,12 @@ const Signup = () => {
 
   return (
     <div className='signup-container'>
-            <div className="signup-navbar">
-                <NavBar/>
-                {/* Your NavBar content */}
-            </div>
-            <div className='signup-content'>
-              <h1>SIGN UP</h1>
+      <div className="signup-navbar">
+          <NavBar/>
+          {/* Your NavBar content */}
+      </div>
+      <div className='signup-content'>
+      <h1>SIGN UP</h1>
 
       <form onSubmit={handleSubmit} className='signup-form'>
       <input
