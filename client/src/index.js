@@ -5,12 +5,11 @@ import "./index.css";
 import App from "./App";
 import Context from "./context/Context";
 
-ReactDOM.render(
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
   <BrowserRouter>
   <Context>
     <App />
   </Context>
-    
-  </BrowserRouter>,
-  document.getElementById("root")
+  </BrowserRouter>
 );

@@ -168,40 +168,6 @@ def create_product():
     db.session.commit()
     return jsonify({'message': 'Product created successfully'}), 201
 
-# # Add Product to Cart
-@app.route('/cart/add', methods=['POST'])
-@jwt_required()
-def add_to_cart():
-    current_user = get_jwt_identity()
-    user = User.query.filter_by(username=current_user).first()
-
-    if not user:
-        return jsonify({'error': 'User not found'}), 404
-
-    data = request.json
-    product_id = data.get('product_id')
-    quantity = data.get('quantity', 1)  # Default quantity is 1 if not provided
-
-    product = Product.query.filter_by(id=product_id).first()
-
-    if not product:
-        return jsonify({'error': 'Product not found'}), 404
-
-    # Check if the product is already in the user's cart
-    cart_item = CartItem.query.filter_by(cart_id=user.id, product_id=product_id).first()
-
-    if cart_item:
-        # Update the quantity if the product is already in the cart
-        cart_item.quantity += quantity
-    else:
-        # Otherwise, create a new cart item
-        cart_item = CartItem(cart_id=user.id, product_id=product_id, quantity=quantity)
-        db.session.add(cart_item)
-
-    db.session.commit()
-
-    return jsonify({'message': 'Product added to cart successfully'}), 201
-
            
 if __name__ == '__main__':
     app.run(port=5505, debug=True)

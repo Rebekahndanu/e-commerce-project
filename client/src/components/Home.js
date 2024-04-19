@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import "./Home.css";
 import NavBar from "./Navbar";
 
+
 function Home() {
     const [products, setProducts] = useState([]);
     const [name,  setName] = useState('');
@@ -42,7 +43,6 @@ function Home() {
         setName(suggestionName);
         setSuggestions([]); // Clear suggestions
     }
-    
     return (
         <div className="home-container">
             <div className="home-navbar">
