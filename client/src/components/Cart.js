@@ -1,5 +1,5 @@
 import React from "react";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Cartcontext } from "../context/Context";
 import "./Cart.css"
 
@@ -8,9 +8,48 @@ const Cart = () => {
   const state = Globalstate.state;
   const dispatch = Globalstate.dispatch;
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
+
+
   const total = state.reduce((total, product) => {
     return total + product.price * product.quantity;
   }, 0);
+
+  const handleCheckout = async () => {
+    setLoading(true);
+    setError(null);
+    setSuccess(false);
+
+    try {
+        const res = await fetch('http://127.0.0.1:5555/orders', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                total: total,
+                items: state.map(item => ({ id: item.id, quantity: item.quantity })),
+            }),
+        });
+
+        if (res.ok) {
+            setSuccess(true);
+            // Clear the cart after successful order placement
+            dispatch({ type: 'CLEAR_CART' });
+        } else {
+            setError('Failed to place order');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        setError('An error occurred while processing your request');
+    } finally {
+        setLoading(false);
+    }
+};
+
+  
   return (
     <div className="cart">
       {state.map((product, index) => {
@@ -47,6 +86,15 @@ const Cart = () => {
           <h2>{total}</h2>
         </div>
       )}
+      {error && <p className="error">{error}</p>}
+            {loading ? (
+                <p>Loading...</p>
+            ) : (
+                <div className="checkout-button">
+                    <button onClick={handleCheckout}>Checkout</button>
+                </div>
+            )}
+            {success && <p className="success">Order placed successfully!</p>}
     </div>
   );
 };
