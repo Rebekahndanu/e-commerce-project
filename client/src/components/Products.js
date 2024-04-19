@@ -4,7 +4,7 @@ import { Cartcontext } from "../context/Context";
 
 function Products() {
     const [products, setProducts] = useState([]);
-    const [name,  setName] = useState('');
+    const [name, setName] = useState('');
     const [suggestions, setSuggestions] = useState([]);
 
     useEffect(() => {
@@ -14,9 +14,10 @@ function Products() {
             .catch((error) => console.error("Error fetching products:", error));
     }, []);
 
-    const Globalstate=useContext(Cartcontext);
-    const dispatch= Globalstate.dispatch;
+    const Globalstate = useContext(Cartcontext);
+    const dispatch = Globalstate.dispatch;
     console.log(Globalstate);
+
     return (
         <div>
             <h1>Products</h1>
@@ -25,19 +26,21 @@ function Products() {
                     product.quantity = 1;
                     return (
                         <li className="cont" key={index}>
-                        <img 
-                            src={product.image_url} 
-                            alt={product.name} 
-                            className="product-image"
-                        />
-                            <h3>{product.name}</h3>
-                            <p>Price: ${product.price}</p>
-                            <button onClick={()=>dispatch({type:'ADD', payload: product})}>Add to Cart</button>
-                        </div>
-                    </li>
-                    )
-                }
-                )}
+                            <div>
+                                <img 
+                                    src={product.image_url} 
+                                    alt={product.name} 
+                                    className="product-image"
+                                />
+                                <h3>{product.name}</h3>
+                                <p>Price: ${product.price}</p>
+                                <button onClick={() => dispatch({ type: 'ADD', payload: product })}>
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </li>
+                    );
+                })}
             </ul>
         </div>
     );
