@@ -1,5 +1,4 @@
 from sqlalchemy_serializer import SerializerMixin
-
 from config import db
 
 class User(db.Model, SerializerMixin):
@@ -81,6 +80,3 @@ class Cart(db.Model, SerializerMixin):
 
     def __repr__(self):
         return f"<Cart(id={self.id}, name={self.name}, quantity={self.quantity}, total_price={self.total_price})"
-
-
-

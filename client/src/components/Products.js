@@ -1,17 +1,18 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import "./Product.css";
 import { Link } from "react-router-dom";
-import "./Home.css";
 import NavBar from "./Navbar";
 
-function Home() {
+function Products() {
     const [products, setProducts] = useState([]);
     const [name,  setName] = useState('');
     const [suggestions, setSuggestions] = useState([]);
 
     useEffect(() => {
         fetch("http://127.0.0.1:5505/products")
-            .then((r) => r.json())
-            .then(data => setProducts(data));
+            .then((response) => response.json())
+            .then(setProducts)
+            .catch((error) => console.error("Error fetching products:", error));
     }, []);
 
     function handleName(event) {
@@ -42,16 +43,17 @@ function Home() {
         setName(suggestionName);
         setSuggestions([]); // Clear suggestions
     }
-    
+
     return (
-        <div className="home-container">
-            <div className="home-navbar">
+        <div className="products-container">
+            <div className="products-navbar">
                 <NavBar/>
                 {/* Your NavBar content */}
             </div>
-            <div className="home-content">
 
-            <h1 className="home-h1">Products</h1>
+            <div className="products-content">
+
+            <h1 className="products-h1">Products</h1>
 
             <form className="search-form" onSubmit={handleSubmit}>
                 <input
@@ -66,21 +68,21 @@ function Home() {
                 </button>
             </form>
 
-           <div className="goods">           <ul className="goods">
+            <ul>
                 {suggestions.map((product) => (
                     <li key={product.id} onClick={() => handleSuggestionClick(product.name)}>
-                        <div className="productcard">
+                        <div>
                             <h3>{product.name}</h3>
                             <p>Price: ${product.price}</p>
-                            <Link to={`/product/${product.id}`}>View Details</Link>
+                            <Link to={`/product/${product.id}`} className="products-more-button">View Details</Link>
                         </div>
                     </li>
                 ))}
             </ul>
 
-            <div className="home-inventory-container">
+            <div className="products-inventory-container">
                     {products.map((product, index) => (
-                        <div className="home-card" key={index}>
+                        <div className="products-card" key={index}>
                         <img 
                             src={product.image_url} 
                             alt={product.name} 
@@ -88,17 +90,17 @@ function Home() {
                         />
                             <h3>{product.name}</h3>
                             <p>Price: {product.price}</p>
-                            <Link to={`/product/${product.id}`} className="home-more-button">Add to Cart</Link>
+                            <Link to={`/product/${product.id}`} className="products-more-button">Add to Cart</Link>
 
                         </div>
                     ))}
                 </div>
 
+
             </div>
 
         </div>
-        </div>
-    )
+    );
 }
 
-export default Home
+export default Products;

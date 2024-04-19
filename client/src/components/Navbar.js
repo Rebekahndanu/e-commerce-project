@@ -41,22 +41,31 @@ import "./Navbar.css"
   
 function NavBar () {
     return(
-        <div className="nav">
-            <div className="nav-logo">Bea<span>uty</span></div>
-            <ul className="nav-menu">
+        <div className="container">
+            {/* <div className="nav-logo">Bea<span>uty</span></div> */}
+            <div className="bar-navbar">
+            <ul>
                 <li>
-                    <NavLink exact='true' to="/">Home</NavLink>
+                    <NavLink exact='true' to="/" className="navlink" activeclassname="active">Home</NavLink>
                 </li>
                 <li>
-                    <NavLink exact='true' to="/Register">Register</NavLink>
+                    <NavLink exact='true' to="/Products" className="navlink" activeclassname="active">Products</NavLink>
+                </li>
+                <li>
+                    <NavLink exact='true' to="/Login" className="navlink" activeclassname="active">Login</NavLink>
                 </li>
                 <li className="nav-menu">
-                    <NavLink exact='true' to="/Signup">Sign Up</NavLink>
+                    <NavLink exact='true' to="/Signup" className="navlink" activeclassname="active">Sign Up</NavLink>
                 </li>
-                <li className="home-button">
-                    <NavLink exact='true' to="/Signup">Sign Up</NavLink>
+                <li className="nav-menu">
+                    <NavLink exact='true' to="/Cart" className="navlink" activeclassname="active">Cart</NavLink>
                 </li>
+                {/* <li className="home-button">
+                    <NavLink exact='true' to="/Signup">Sign Up</NavLink>
+                </li> */}
             </ul>
+            </div>
+
         </div>
     )
 }
