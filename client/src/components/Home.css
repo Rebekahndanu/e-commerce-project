@@ -19,6 +19,8 @@
 .current {
   opacity: 1;
   transform: translateX(0);
+}
+  
 .home-card {
   background-color: white;
   border-radius: 10px;
