@@ -1,0 +1,54 @@
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center the content horizontally */
+}
+
+.login-content {
+    width: 300px; /* Set a fixed width for the content */
+    margin-top: 70px; /* Adjust the top margin for spacing */
+    padding-top: 20px; /* Add padding to prevent content from being hidden behind the navbar */
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #f2f2f2;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.login-input {
+    width: 100%; /* Adjust input width to fill the form container */
+    margin: 10px 0; /* Adjust margin for spacing between inputs */
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+}
+
+.login-button {
+    width: 100%; /* Adjust button width to fill the form container */
+    margin: 10px 0; /* Adjust margin for spacing between inputs */
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #333;
+    color: white;
+    cursor: pointer;
+}
+
+.login-navbar {
+    position: fixed; /* Position navbar fixed at the top */
+    top: 0; /* Align navbar at the top of the page */
+    left: 0; /* Align navbar at the left of the page */
+    width: 100%; /* Make navbar full width */
+    background-color: #333;
+    padding-top: 20px;
+    z-index: 1000; /* Ensure navbar appears above other content */
+}
+
+.login-h1{
+    text-align: center;
+}

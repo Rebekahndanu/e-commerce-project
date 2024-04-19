@@ -1,0 +1,44 @@
+.container {
+    display: flex;
+    position: fixed;
+    position: fixed;
+  }
+  
+  .bar-navbar {
+    flex: 0 0 auto; /* Make the navbar non-flexible */
+    width: 200px; /* Adjust width as needed */
+    background-color:black; /* Change the color as per your preference */
+    height: 100vh; /* Set height to full viewport height */
+    padding-top: 20px; /* Add padding for better appearance */
+  }
+  
+  .bar-navbar ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .bar-navbar ul li {
+    padding: 10px 0;
+    text-align: center;
+  }
+  
+  .bar-navbar ul li a {
+    text-decoration: none;
+    color: white;
+    display: block;
+    padding: 10px;
+  }
+  
+  .bar-navbar ul li a:hover {
+    background-color: #555;
+  }
+
+  .navlink.active {
+    background-color: #555; /* Change the background color for active NavLink */
+}
+  
+  /* Content section (appears on the right) */
+  .content {
+    flex: 1;
+    padding: 20px;
+  }

@@ -6,6 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 from flask_bcrypt import Bcrypt
 
+
 # Instantiate app, set attributes
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
@@ -26,7 +27,3 @@ api = Api(app)
 # Instantiate CORS
 CORS(app)
 
-bcrypt = Bcrypt(app)
-
-app.secret_key = 'secret key'
-app.config['JWT_SECRET_KEY'] = 'this-is-secret-key'
