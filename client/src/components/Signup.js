@@ -22,7 +22,7 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://127.0.0.1:5505//userRegister', {
+      const response = await fetch('http://127.0.0.1:5505/userRegister', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

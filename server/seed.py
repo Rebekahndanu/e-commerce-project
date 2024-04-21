@@ -1,5 +1,5 @@
 from app import app
-from models import db, User, Order, Product, Cart
+from models import db, User, Order, Product
 from faker import Faker
 
 
@@ -10,7 +10,6 @@ with app.app_context():
     print("Deleting data...")
     User.query.delete()
     Order.query.delete()
-    Cart.query.delete()
     Product.query.delete()
     db.session.commit()
 

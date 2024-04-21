@@ -19,6 +19,7 @@
 .current {
   opacity: 1;
   transform: translateX(0);
+}
 .home-card {
   background-color: white;
   border-radius: 10px;
@@ -38,16 +39,18 @@
   animation: slide-up 1s ease .5s;
   animation-fill-mode: forwards;
   visibility: hidden; 
+  z-index: 0;
 }
 /* Home.css */
 
 .content h2{
-  font-size: 30px;
+  font-size: 40px;
   margin-bottom: 20px;
+  color: rgb(189, 49, 72);
 }
 
 .content p {
-  font-size: 20px;
+  font-size: 26px;
   margin-bottom: 20px;
 }
 
@@ -116,10 +119,11 @@
   padding-right: 15px;
   padding-top: 8px;
   padding-bottom: 8px;
-  border-radius: 10px;
+  border-radius: 20px;
   width: 80px;
   position: relative;
   z-index: 1;
+  
 }
 
 .homebtn a{

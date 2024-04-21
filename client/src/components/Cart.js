@@ -1,102 +1,130 @@
-import React from "react";
-import { useContext, useState } from "react";
-import { Cartcontext } from "../context/Context";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux"
+import { Link } from "react-router-dom";
 import "./Cart.css"
+import { removeFromCart, addToCart,decreaseCart, clearCart, getTotals } from "../features/cartSlice"
 
 const Cart = () => {
-  const Globalstate = useContext(Cartcontext);
-  const state = Globalstate.state;
-  const dispatch = Globalstate.dispatch;
-
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
+  const cart = useSelector((state) => state.cart)
+  const dispatch = useDispatch()
 
 
-  const total = state.reduce((total, product) => {
-    return total + product.price * product.quantity;
-  }, 0);
+  useEffect(() => {
+    dispatch(getTotals());
+  }, [cart, dispatch]);
+
+  const handleAddToCart = (cartItem) => {
+    dispatch(addToCart(cartItem))
+  };
+  const handleDecreaseCart = (cartItem) => {
+    dispatch(decreaseCart(cartItem))
+  };
+  const handleRemoveFromCart = (cartItem) => {
+    dispatch(removeFromCart(cartItem))
+  };
+  const handleClearCart = () => {
+    dispatch(clearCart())
+  };
 
   const handleCheckout = async () => {
-    setLoading(true);
-    setError(null);
-    setSuccess(false);
-
     try {
-        const res = await fetch('http://127.0.0.1:5555/orders', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                total: total,
-                items: state.map(item => ({ id: item.id, quantity: item.quantity })),
-            }),
-        });
+      const response = await fetch('http://127.0.0.1:5505/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
 
-        if (res.ok) {
-            setSuccess(true);
-            // Clear the cart after successful order placement
-            dispatch({ type: 'CLEAR_CART' });
-        } else {
-            setError('Failed to place order');
-        }
+           'Authorization': "Bearer ${localStorage.getItem('access_token')}", 
+        },
+        body: JSON.stringify({
+          product_id: cart.cartItems.map(item => item.id),
+          quantity: cart.cartItems.map(item => item.cartQuantity),
+          // user_id: userId // Add user ID here if needed
+        })
+      });
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Order placed successfully:', data);
+      } else {
+        console.error('Failed to place order:', response.statusText);
+      }
+      dispatch(clearCart());
     } catch (error) {
-        console.error('Error:', error);
-        setError('An error occurred while processing your request');
-    } finally {
-        setLoading(false);
+      console.error('Error:', error.message);
     }
-};
+  };
 
-  
   return (
-    <div className="cart">
-      {state.map((product, index) => {
-        return (
-          <div className="card" key={index}>
-            <img src={product.image_url} alt="" />
-            <p>{product.name}</p>
-            <p>{product.quantity * product.price}</p>
-            <div className="quantity">
-              <button
-                onClick={() => dispatch({ type: "INCREASE", payload: product })}>
-                +
-              </button>
-              <p>{product.quantity}</p>
-              <button
-                onClick={() => {
-                  if (product.quantity > 1) {
-                    dispatch({ type: "DECREASE", payload: product });
-                  } else {
-                    dispatch({ type: "REMOVE", payload: product });
-                  }
-                }}>
-                -
-              </button>
-            </div>
-            <h2 onClick={() => dispatch({ type: "REMOVE", payload: product })}>
-              x
-            </h2>
+    <div className="cart-container">
+       <h2>Cart</h2> 
+       {cart.cartItems.length === 0 ? (
+        <div className="cart-empty">
+          <p>Your cart is empty</p>
+          <div className="shop">
+            <Link to="/products">
+              <span>Start shopping</span>
+            </Link>
           </div>
-        );
-      })}
-      {state.length > 0 && (
-        <div className="total">
-          <h2>{total}</h2>
+        </div>
+       ) : (
+        <div>
+          <div className="titles">
+          <h3 className="product-title">Products</h3>
+          <h3 className="price">Price</h3>
+          <h3 className="Quantity">Quantity</h3>
+          <h3 className="total">Total</h3>
+      </div>
+      <div className="cart-items">
+            {cart.cartItems &&
+              cart.cartItems.map((cartItem) => (
+                <div className="cart-item" key={cartItem.id}>
+                  <div className="cart-product">
+                    <img src={cartItem.image} alt={cartItem.name} />
+                    <div>
+                      <h3>{cartItem.name}</h3>
+                      <p>{cartItem.desc}</p>
+                      <button onClick={() => handleRemoveFromCart(cartItem)}>
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                  <div className="cart-product-price">${cartItem.price}</div>
+                  <div className="cart-product-quantity">
+                    <button onClick={() => handleDecreaseCart(cartItem)}>
+                      -
+                    </button>
+                    <div className="count">{cartItem.cartQuantity}</div>
+                    <button onClick={() => handleAddToCart(cartItem)}>
+                      +
+                    </button>
+                  </div>
+                  <div className="cart-product-total-price">
+                    ${cartItem.price * cartItem.cartQuantity}
+                  </div>
+                </div>
+              ))}
+          </div>
+          <div className="cart-summary">
+            <button className="clear-btn" onClick={() => handleClearCart()}>
+              Clear Cart
+            </button>
+            <div className="cart-checkout">
+              <div className="subtotal">
+                <span>Subtotal</span>
+                <span className="amount">${cart.cartTotalAmount}</span>
+              </div>
+              <p>Taxes and shipping calculated at checkout</p>
+              <button onClick={() => handleCheckout()}>Checkout</button>
+              <div className="continue-shopping">
+                <Link to="/products">
+                  <span>Continue shopping</span>
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
       )}
-      {error && <p className="error">{error}</p>}
-            {loading ? (
-                <p>Loading...</p>
-            ) : (
-                <div className="checkout-button">
-                    <button onClick={handleCheckout}>Checkout</button>
-                </div>
-            )}
-            {success && <p className="success">Order placed successfully!</p>}
     </div>
   );
 };
-
-export default Cart
+ 
+export default Cart;

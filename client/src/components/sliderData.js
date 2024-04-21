@@ -3,11 +3,15 @@ const sliderData = [
       image: 'https://media.istockphoto.com/id/1176520415/photo/beautiful-woman-applying-make-up.jpg?s=612x612&w=0&k=20&c=vEUE-q1ZlX3VPocScpqxBv24xL5pXahe4oIeRKy3mwg=',
       title: 'Discover Your Beauty Essentials',
       body: 'Explore a world of skincare, makeup, and self-care products that elevate your beauty routine. Dive into our curated collection and find the perfect products to pamper yourself.',
+      buttonText: 'Explore', 
+      buttonAction: '/Login' ,
     },
     {
       image: 'https://media.istockphoto.com/id/1408439145/photo/autumn-skincare-and-autumn-makeup-concept-with-beauty-products-on-table.jpg?s=612x612&w=0&k=20&c=kuyRQU6vR1uSUZK7GyddjJe1RE1OIQivfILVCn_yAdE=',
       title: 'Transform Your Look, Express Yourself',
       body: 'Step into a world of endless possibilities with our range of beauty products. From everyday essentials to glamorous must-haves, redefine your beauty style and let your personality shine.',
+      buttonText: 'Explore', 
+      buttonAction: '/Login' ,
     },
     {
       image: 'https://media.istockphoto.com/id/519356382/photo/makeup-products-to-even-out-skin-tone-and-complexion.jpg?s=612x612&w=0&k=20&c=guXlDzGNa27seg96bwyJQ5mCQIDmamT2xRHSqD0NL18=',
