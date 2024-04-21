@@ -1,0 +1,33 @@
+.about-page {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .about-image {
+    width: 700px;
+    height: 700px;
+    
+    border-radius: 8px;
+  }
+  
+  .about-content {
+    width: 50%;
+    font-size: larger;
+    font-weight: bold;
+    line-height: 32px;
+    
+  }
+  
+  /* .about-title {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 90px;
+  } */
+  
+  .about-description {
+    font-size: 1.2rem;
+    color: #666;
+  }
+  

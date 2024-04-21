@@ -68,6 +68,9 @@ function NavBar () {
                 {/* <li className="home-button">
                     <NavLink exact='true' to="/Signup">Sign Up</NavLink>
                 </li> */}
+                                <li className="nav-menu">
+                    <NavLink exact='true' to="/About" className="navlink" activeclassname="active">About</NavLink>
+                </li>
             </ul>
             </div>
 

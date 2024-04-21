@@ -7,6 +7,7 @@ import Login from "./components/Login";
 import Cart from "./components/Cart";
 import User from "./components/User";
 import UserEdit from "./components/UserEdit"
+import About from "./components/About";
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
                 <Route path="/Cart" element={<Cart />} />
                 <Route path="/User" element={<User />} />
                 <Route path="/Edit-User" element={<UserEdit />} />
+                <Route path="/About" element={<About/>}/>
 
                 
             </Routes>
