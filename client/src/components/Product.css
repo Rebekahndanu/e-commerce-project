@@ -42,10 +42,26 @@
     text-align: center;
     font-size: 16px;
   }
+
+  .addtocart {
+    margin-top: 10px;
+    color: #333;
+    padding: 6px 6px 6px 6px;
+    background-color: #f2f2f2;
+    border-radius: 15px;
+    font-size: 16px;
+  }
+
+  .addtocart:hover {
+    background-color: #3a55a7;
+    color: #fff;
+    border: #3a55a7;
+  }
   
   .search-form {
     margin-bottom: 20px;
     text-align: center;
+
   }
   
   .search-input {
@@ -53,6 +69,7 @@
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    width: 50%;
   }
   
   .search-button {
@@ -68,7 +85,7 @@
   }
   
   .search-button:hover {
-    background-color: #0056b3;
+    background-color: #3a55a7;
   }
   
   img {

@@ -113,7 +113,7 @@ function Products() {
                         />
                             <h3>{product.name}</h3>
                             <p>Price: ${product.price}</p>
-                            <button onClick={() => handleAddToCart(product)}>
+                            <button onClick={() => handleAddToCart(product)} className="addtocart">
                                     Add to Cart
                             </button>
                         </div>

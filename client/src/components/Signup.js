@@ -31,7 +31,7 @@ const Signup = () => {
       });
       const data = await response.json();
       console.log('User signed up:', data);
-      navigate('/products'); 
+      navigate('/home'); 
     } catch (error) {
       console.error('Signup failed:', error);
     }
@@ -39,10 +39,6 @@ const Signup = () => {
 
   return (
     <div className='signup-container'>
-      <div className="signup-navbar">
-          <NavBar/>
-          {/* Your NavBar content */}
-      </div>
       <div className='signup-content'>
       <h1>SIGN UP</h1>
 

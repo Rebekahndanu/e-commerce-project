@@ -1,0 +1,42 @@
+.footer {
+    background-color: #333;
+    color: #fff;
+    padding: 30px 0;
+}
+
+.footer h5 {
+    color: #fff;
+}
+
+.footer p {
+    color: #ccc;
+}
+
+.footer a {
+    color: #fff;
+}
+
+.footer a:hover {
+    color: #ccc;
+}
+
+.footer ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer ul li {
+    margin-bottom: 10px;
+}
+
+.footer address {
+    color: #ccc;
+}
+
+.footer address a {
+    color: #ccc;
+}
+
+.footer address a:hover {
+    color: #fff;
+}

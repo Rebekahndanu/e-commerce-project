@@ -1,6 +1,6 @@
 from config import app, db, api
 from models import User, Product, Order
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, make_response
 from flask_restful import Api, Resource
 from flask_cors import CORS, cross_origin
 from flask_migrate import Migrate
@@ -75,155 +75,6 @@ class UserRegister(Resource):
 
 api.add_resource(UserRegister, '/userRegister')
 
-# class UserLogin(Resource):
-#     @cross_origin()
-#     def post(self):
-#         username = request.json['username']
-#         password = str(request.json['password'])
-
-#         user = User.query.filter_by(username=username).first()
-
-#         if user is None:
-#             return jsonify({'error': 'Unauthorized'}), 401
-
-#         if not bcrypt.check_password_hash(user.password, password):
-#             return jsonify({'error': 'Unauthorized, incorrect password'}), 401
-        
-#         access_token = create_access_token(identity=username)
-#         user.access_token = access_token
-
-
-#         return jsonify({
-#             "id": user.id,
-#             "username": user.username,
-#             "access_token": access_token
-            
-#         }), 201
-    
-# api.add_resource(UserLogin, '/userLogin')
-
-# class UserLogout(Resource):
-#     def post(self):
-#         pass
-
-# api.add_resource(UserLogout, '/userLogout')
-
-# @app.route('/users/<int:id>', methods=['PATCH'])
-# def update_user(id):
-#     user = User.query.get(id)
-#     if not user:
-#         return jsonify({"error": "User not found"}), 404
-    
-#     data = request.json
-#     if 'name' in data:
-#         user.name = data['name']
-#     if 'email' in data:
-#         user.email = data['email']
-#     if 'phone_number' in data:
-#         user.phone_number = data['phone_number']
-    
-#     db.session.commit()
-    
-#     return jsonify({
-#         "id": user.id,
-#         "name": user.name,
-#         "email": user.email,
-#         "phone_number": user.phone_number
-#     }), 200
-
-
-
-
-# # GET FOR ALL MODELS
-
-# @app.route('/users', methods=['GET'])
-# def get_all_users():
-#     if request.method == 'GET':
-#         users = User.query.all()
-#         return jsonify([user.to_dict() for user in users])
-
-    
-# @app.route('/products', methods=[ 'GET'])
-# def get_all_products():
-#     if request.method == 'GET':  
-#         name = request.args.get('name')
-
-#         if name:
-#             products = Product.query.filter(Product.name.ilike(f'%{name}%')).all()
-        
-#         else:
-#             products = Product.query.all()
-
-#         return jsonify([product.to_dict() for product in products])
-
-# @app.route('/products/<int:id>', methods=['GET'])
-# def get_products_using_id(id):
-#     session = db.session
-#     product = session(Product, id)
-
-#     if request.method == 'GET':
-#         return jsonify(product.to_dict()), 200
-    
-
-# @app.route('/users/<int:id>', methods=['GET','PATCH', 'DELETE'])
-# def get_and_patch_users_using_id(id):
-#     user = User.query.get(id)
-
-#     if request.method == 'GET':
-#         return jsonify(user.to_dict()), 200
-    
-# @app.route('/products/<int:id>', methods=['PATCH'])
-# def update_product(id):
-#     product = Product.query.get(id)
-#     if not product:
-#         return jsonify({"error": "Product not found"}), 404
-    
-#     data = request.json
-#     if 'name' in data:
-#         product.name = data['name']
-#     if 'price' in data:
-#         product.price = data['price']
-#     if 'image_url' in data:
-#         product.image_url = data['image_url']
-    
-#     db.session.commit()
-    
-#     return jsonify(product.serialize()), 200
-
-# @app.route('/products', methods=['POST'])
-# def create_product():
-#     data = request.json
-#     image_url = data.get('image_url')
-#     name = data.get('name')
-#     price = data.get('price')
-#     new_product = Product(image_url=image_url, name=name, price=price)
-#     db.session.add(new_product)
-#     db.session.commit()
-#     return jsonify({'message': 'Product created successfully'}), 201
-
-        
-# # # add to cart functionality
-# # @app.route('/cart/add', methods=['POST'])
-# # def add_to_cart():
-# #     data = request.json
-# #     product_id = data.get('product_id')
-# #     product = Product.query.get(product_id)
-
-# #     if not product:
-# #         return jsonify({'error': 'Product not found'}), 404
-# #     cart_item = Cart(product_id=product_id)
-# #     db.session.add(cart_item)
-# #     db.session.commit()
-# #     return jsonify({'message': 'Product added to cart successfully'}), 201
-
-        
-        
-# if __name__ == '__main__':
-#     app.run(port=5505, debug=True)
-
-
-
-
 class UserLogin(Resource):
     @cross_origin()
     def post(self):
@@ -281,8 +132,6 @@ def update_user(id):
     }), 200
 
 
-
-
 # GET FOR ALL MODELS
 
 @app.route('/users', methods=['GET'])
@@ -315,24 +164,25 @@ def get_products_using_id(id):
     
 
 @app.route('/users/<int:id>', methods=['GET','PATCH', 'DELETE'])
-def get_and_patch_users_using_id(id):
-    user = User.query.get(id)
+def get_and_patch_users_using_id( id):
+    user = User.query.filter_by(id=id).first()
+    print("user",user)
 
     if request.method == 'GET':
         return jsonify(user.to_dict()), 200
     
-@jwt_required
-def delete_user(username):
-    current_username =get_jwt_identity()
-    if current_username != username:
-        return jsonify({"error": "You cannot delete this account"})
-    
-    user = User.query.filter_by(username=username).first()
+    # @jwt_required
+    # def delete_user(username):
+    #     current_username =get_jwt_identity()
+    #     if current_username != username:
+    #         return jsonify({"error": "You cannot delete this account"})
+        
+    #     user = User.query.filter_by(username=username).first()
 
-    db.session.delete(user)
-    db.session.commit()
+    #     db.session.delete(user)
+    #     db.session.commit()
 
-    return jsonify({"message": "User deleted successfully"})
+    #     return jsonify({"message": "User deleted successfully"})
 
 class OrderResource(Resource):
     @jwt_required
@@ -364,9 +214,12 @@ class OrderResource(Resource):
             price=total_price,
             user_id=current_user_id
         )
+        print("new", new_order)
 
         db.session.add(new_order)
         db.session.commit()
+
+        print("new", new_order)
 
         return jsonify ({
             'id': new_order.id,
@@ -375,6 +228,8 @@ class OrderResource(Resource):
             'price': new_order.price,
             'user_id': new_order.user_id
         }),201
+
+        # return make_response(new_order, 201)
 
 
 api.add_resource(OrderResource, '/orders')

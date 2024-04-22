@@ -31,7 +31,7 @@ function User () {
     // Function to get user ID, you'll replace this with your actual authentication logic
     function getUserId() {
         // Placeholder logic to get user ID, replace this with actual logic
-        return 1; // Assuming user ID 1 for demonstration
+        return 2; // Assuming user ID 1 for demonstration
     }
 
     return ( 
