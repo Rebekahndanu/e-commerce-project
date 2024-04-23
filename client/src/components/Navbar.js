@@ -17,9 +17,9 @@ function NavBar () {
                     <NavLink exact='true' to="/Products" className="navlink" activeclassname="active">Products</NavLink>
                 </li>
             
-                <li className="nav-menu">
+                {/* <li className="nav-menu">
                     <NavLink exact='true' to="/Orders" className="navlink" activeclassname="active">Orders</NavLink>
-                </li> 
+                </li>  */}
                 <li className="nav-menu">
                     <NavLink exact='true' to="/Cart" className="navlink" activeclassname="active">
                         <div className="nav-cart">

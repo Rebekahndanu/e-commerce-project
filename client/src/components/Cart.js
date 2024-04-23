@@ -1,79 +1,86 @@
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux"
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import "./Cart.css"
-import { removeFromCart, addToCart,decreaseCart, clearCart, getTotals } from "../features/cartSlice"
+import "./Cart.css";
+import { removeFromCart, addToCart, decreaseCart, clearCart, getTotals } from "../features/cartSlice";
 import NavBar from "./Navbar";
 
 const Cart = () => {
-  const cart = useSelector((state) => state.cart)
-  const dispatch = useDispatch()
-
+  const cart = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getTotals());
   }, [cart, dispatch]);
 
+  const getUserId = () => {
+    return 2;
+  };
+
   const handleAddToCart = (cartItem) => {
-    dispatch(addToCart(cartItem))
+    dispatch(addToCart(cartItem));
   };
   const handleDecreaseCart = (cartItem) => {
-    dispatch(decreaseCart(cartItem))
+    dispatch(decreaseCart(cartItem));
   };
   const handleRemoveFromCart = (cartItem) => {
-    dispatch(removeFromCart(cartItem))
+    dispatch(removeFromCart(cartItem));
   };
   const handleClearCart = () => {
-    dispatch(clearCart())
+    dispatch(clearCart());
   };
 
-    const handleCheckout = async () => {
-      try {
-        const token = localStorage.getItem('access_token');
-        console.log('Token:', token); // Add this line for debugging
-        if (!token) {
-          console.error('Access token not found');
-          return;
-        }
+  const handleCheckout = async () => {
+    try {
+      const userId = getUserId();
+      // const token = localStorage.getItem("access_token");
+      // console.log("Token:", token); 
+      // if (!token) {
+      //   console.error("Access token not found");
+      //   return;
+      // }
 
-      const response = await fetch('http://127.0.0.1:5505/orders', {
-        method: 'POST',
+      const response = await fetch("http://127.0.0.1:5505/orders", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,  // Use backticks for string interpolation
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          product_id: cart.cartItems.map(item => item.id),
-          quantity: cart.cartItems.map(item => item.cartQuantity),
-        })
+          user_id: userId,
+          quantity: cart.cartItems.map((item) => item.cartQuantity),
+          product_id: cart.cartItems.map((item) => item.id),
+        }),
       });
 
       if (response.ok) {
         const data = await response.json();
-        console.log('Order placed successfully:', data);
+        console.log("Order placed successfully:", data);
       } else {
-        console.error('Failed to place order:', response.statusText);
+        console.error("Failed to place order:", response.statusText);
       }
 
       dispatch(clearCart());
     } catch (error) {
-      console.error('Error:', error.message);
+      console.error("Error:", error.message);
     }
   };
+
   return (
     <div className="cart-container">
       <div className="cart-navbar">
-        <NavBar/>
+        <NavBar />
         {/* Your NavBar content */}
       </div>
       <div className="cart-content">
-        <h2>Cart</h2> 
+        <h2>CART</h2>
         {cart.cartItems.length === 0 ? (
           <div className="cart-empty">
             <p>Your cart is empty</p>
             <div className="shop">
               <Link to="/products">
-                <span>Start shopping</span>
+                <button>
+                  <span>Start shopping</span>
+                </button>
               </Link>
             </div>
           </div>
@@ -92,24 +99,15 @@ const Cart = () => {
                     <div>
                       <h3>{cartItem.name}</h3>
                       <p>{cartItem.desc}</p>
-                      <button onClick={() => handleRemoveFromCart(cartItem)}>
-                        Remove
-                      </button>
                     </div>
                   </div>
                   <div className="cart-product-price">${cartItem.price}</div>
                   <div className="cart-product-quantity">
-                    <button onClick={() => handleDecreaseCart(cartItem)}>
-                      -
-                    </button>
+                    <button onClick={() => handleDecreaseCart(cartItem)}>-</button>
                     <div className="count">{cartItem.cartQuantity}</div>
-                    <button onClick={() => handleAddToCart(cartItem)}>
-                      +
-                    </button>
+                    <button onClick={() => handleAddToCart(cartItem)}>+</button>
                   </div>
-                  <div className="cart-product-total-price">
-                    ${cartItem.price * cartItem.cartQuantity}
-                  </div>
+                  <div className="cart-product-total-price">${cartItem.price * cartItem.cartQuantity}</div>
                 </div>
               ))}
             </div>
@@ -137,5 +135,5 @@ const Cart = () => {
     </div>
   );
 };
- 
+
 export default Cart;

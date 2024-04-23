@@ -3,10 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons'; 
 import "./Home.css";
 import sliderData from "./sliderData";
-// import { NavLink } from "react-router-dom";
-// import { useNavigate } from "react-router-dom";
 import NavBar from "./Navbar";
 import Footer from "./Footer";
+// import About from "./About";
 
 function Home() {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -58,18 +57,10 @@ function Home() {
                             <div className="content">
                                 <h2>{slide.title}</h2>
                                 <p>{slide.body}</p>
-                                {/* <p className="homebtn">
-                                <button onClick={() => handleSignUpClick(slide)}>{slide.buttonText}</button>
-                                </p> */}
                             </div>
                         </div>
                     ))}
                 </div>
-                <div className="About"></div>
-                <div className="categoties"></div>
-            </div>
-            <div>
-                <Footer/>
             </div>
         </>
     );

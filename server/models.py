@@ -21,7 +21,7 @@ class User(db.Model, SerializerMixin):
     confirm_password = db.Column(db.String(80), nullable=False)
 
     # Serialization rules
-    serialize_rules = ('-orders.user',)
+    serialize_rules = ('-orders.user', '-products.users')
 
     # One-to-many relationship with Order
     orders = db.relationship("Order", back_populates="user")
@@ -42,7 +42,7 @@ class Product(db.Model, SerializerMixin):
     price = db.Column(db.Float, nullable=False)
 
     # Serialization rules
-    serialize_rules = ('-orders.product',)
+    serialize_rules = ('-orders.product', '-users.products', '-password', '-confirm_password')
 
     #  one-to-many relationship with Order
     orders = db.relationship("Order", back_populates="product")
@@ -79,8 +79,7 @@ class Order(db.Model, SerializerMixin):
     product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
     product = db.relationship("Product", back_populates="orders")
 
-    # Define the price as a floating-point value
-    price = db.Column(db.Float, nullable=False)
+    # price = db.Column(db.Float, nullable=False)
 
     # Define the one-to-one relationship with Cart
     # cart_id = db.Column(db.Integer, db.ForeignKey('carts.id'))

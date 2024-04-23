@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "./Navbar";
+import "./UserEdit.css";
 
 function Edit_User() {
     const [user, setUser] = useState({});

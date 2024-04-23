@@ -184,55 +184,39 @@ def get_and_patch_users_using_id( id):
 
     #     return jsonify({"message": "User deleted successfully"})
 
-class OrderResource(Resource):
-    @jwt_required
-    @cross_origin
+class Orders(Resource):
     def post(self):
-        product_id = request.json['product_id']
-        quantity = request.json['quantity']
-        current_user_id = get_jwt_identity()
 
-        if not all([product_id, quantity]):
-            return jsonify({'error': 'Product ID and quantity are required'}), 400
-
-        # Retrieve user and product
-        user = User.query.filter_by(id=current_user_id).first()
-        product = Product.query.filter_by(id=product_id).first()
-
-        if not user:
-            return jsonify({'error': 'User not found'}), 404
-        if not product:
-            return jsonify({'error': 'Product not found'}), 404
-
-        # Calculate total price
-        total_price = product.price * quantity
-
-        # Create a new order
-        new_order = Order(
-            product_id=product_id,
-            quantity=quantity,
-            price=total_price,
-            user_id=current_user_id
-        )
-        print("new", new_order)
-
-        db.session.add(new_order)
-        db.session.commit()
-
-        print("new", new_order)
-
-        return jsonify ({
-            'id': new_order.id,
-            'product_id': new_order.product_id,
-            'quantity': new_order.quantity,
-            'price': new_order.price,
-            'user_id': new_order.user_id
-        }),201
-
-        # return make_response(new_order, 201)
+        data = request.json
+        # current_user_id = get_jwt_identity()
 
 
-api.add_resource(OrderResource, '/orders')
+        try:
+            new_order = Order(
+                quantity = data["quantity"],
+                product_id = data['product_id'],
+                user_id = data["user_id"],
+
+            )
+            db.session.add(new_order)
+            db.session.commit()
+            print("cool")
+            return make_response(new_order.to_dict(), 201)
+        
+
+        except Exception as e:
+            db.session.rollback()
+            return make_response(jsonify({"error": str(e)}), 400) 
+            
+        print("wow")
+
+        
+
+        print("old")
+
+
+
+api.add_resource(Orders, "/orders")
     
 @app.route('/products/<int:id>', methods=['PATCH'])
 def update_product(id):
@@ -268,3 +252,84 @@ def create_product():
         
 if __name__ == '__main__':
     app.run(port=5505, debug=True)
+
+
+class OrderResource(Resource):
+    def get(self):
+        print("get")
+        # orders = Order.query.all()
+        # all_orders = []
+
+        # for order in orders:
+        #     order_details = {
+        #         'order_id': order.id,
+
+        #     }
+
+    @jwt_required
+#     @cross_origin
+    def post(self):
+        print("morning")
+        # data = request.json
+        # current_user_id = get_jwt_identity()
+
+        
+        #     )
+        #     db.session.add(new_order)
+        #     db.session.commit()
+        #     return make_response(new_order.to_dict(), 201)
+        # except Exception as e:
+        #     db.session.rollback()
+        #     return make_response(jsonify({"error": str(e)}), 400) 
+
+
+        # product_id = request.json['product_id']
+        # quantity = request.json['quantity']
+        # current_user_id = get_jwt_identity()
+        # print("new", current_user_id)
+
+        if not all([product_id, quantity]):
+            print("old", product_id)
+            return jsonify({'error': 'Product ID and quantity are required'}), 400
+
+        # # Retrieve user and product
+        # user = User.query.filter_by(id=current_user_id).first()
+        # product = Product.query.filter_by(id=product_id).first()
+
+        # if not user:
+        #     return jsonify({'error': 'User not found'}), 404
+        # if not product:
+        #     return jsonify({'error': 'Product not found'}), 404
+
+        # # Calculate total price
+        # total_price = product.price * quantity
+
+        # # Create a new order
+        # new_order = Order(
+        #     product_id=product_id,
+        #     quantity=quantity,
+        #     price=total_price,
+        #     user_id=current_user_id
+        # )
+        # print("new", new_order)
+
+        # db.session.add(new_order)
+        # db.session.commit()
+
+        # print("new", new_order)
+
+        # return jsonify ({
+        #     'id': new_order.id,
+        #     'product_id': new_order.product_id,
+        #     'quantity': new_order.quantity,
+        #     'price': new_order.price,
+        #     'user_id': new_order.user_id
+        # }),201
+
+#         # return make_response(new_order, 201)
+
+    
+        
+
+
+api.add_resource(OrderResource, '/orders')
